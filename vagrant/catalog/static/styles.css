@@ -1,0 +1,22 @@
+body            { font-family: 'Georgia'; background-color: black; background-image: url(#ffffff "http://svite-league-apps-content.s3.amazonaws.com/bgimages/steel-silhouette.jpg") no-repeat right top;}
+
+h1, h2, h3, h4       { color: #AABBCC; }
+h1, h2          { font-family: 'Georgia', serif; margin: 0; }
+h1              { border-bottom: 1px solid #eee; }
+h2              { font-size: 1.2em; }
+
+p               { color: #CCCCCC;}
+
+a {text-decoration: none; color:#CCCCCC; font-size: .75em;}
+
+.pane {position:absolute; left: 10%; border: 2px solid;
+    border-radius: 25px; padding: 5px; margin: 5px; border-color: #AAAAAA; background-color: #AA00AA; }
+.header         {left:50%; text-align: center;}
+.name {width:50%;display: inline-block; float: left;}
+.description {width:50%;display: inline-block; float: left;}
+.editdeletepane{}
+
+.flash          { background: #cee5345; }
+
+
+

@@ -1,0 +1,23 @@
+body{font-family: 'Georgia'; background-color:rgb(255,255,255);}
+p               { color: rgb(1,1,11);}
+
+
+.titlepane{ background-color: rgb(255,255,255);
+border-color: #AAAAAA;}
+.pane {position:absolute; left: 5%; border: 2px solid;
+    border-radius: 25px; padding: 5px;  }
+.menupane {position:absolute; left: 40%;top: 5%; border: 2px solid;
+    border-radius: 25px; padding: 20px;  }
+.login {position:absolute; left: 90%; top: 0%;}
+.header         {left:50%; text-align: center;}
+.name {width:50%;display: inline-block; float: left;}
+.description {width:50%;display: inline-block; float: left;}
+.editdeletepane{}
+
+.flash          { background: #cee5345; }
+
+
+   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
+  </script>
+
+<script src="//apis.google.com/js/platform.js?onload=start"> </script>

@@ -1,0 +1,32 @@
+<html>
+
+<head>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style_sport.css') }}">
+	</head>
+
+<body>
+<div class = 'titlepane'>
+<h1>Catalog App</h1>
+</div>
+
+
+<div class = 'pane2'>
+<h2>Categories</h2>
+
+
+<div class='login'>
+<a href = "{{url_for('showLogin')}}"><h2>Login</h2></a>
+</div>
+
+{% for sport in catalog %}
+
+<a href = "{{url_for('showMenu', catalog_id = sport.id)}}"> <p>{{sport.name}}</p></a>
+
+
+{% endfor %}
+
+</div>
+
+</body>
+
+</html>

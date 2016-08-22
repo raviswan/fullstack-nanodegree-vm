@@ -1,0 +1,14 @@
+<html>
+	
+<head>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style_sport.css') }}">
+</head>
+	<body>
+		<p>{{item.description}}</p>
+		<a href = "{{url_for('editMenuItem', catalog_id = catalog.id, item_id = i.id)}}"><p>Edit</p></a><p>|</p>
+		<a href = "{{url_for('deleteMenuItem', catalog_id = catalog.id, item_id = i.id)}}"><p>Delete</p></a>
+
+	</body>
+
+
+</html>
