@@ -16,7 +16,7 @@
 	<div>
 	{% for sport in fullCatalog %}
 
-	<a href = "{{url_for('showMenu', catalog_id = sport.id)}}"> <p>{{sport.name}}</p></a>
+	<a href = "{{url_for('showMenu', sport_name = sport.name)}}"> <p>{{sport.name}}</p></a>
 
 
 	{% endfor %}
@@ -24,11 +24,11 @@
 	</div>
 
 	<div class = 'menupane'>
-		<h3>{{catalog.name}} Items ({{itemCount}} items)</h3>
+		<h3>{{currSport.name}} Items ({{itemCount}} items)</h3>
 
     {% if items !=[] %}
     {% for i in items %}
-			<a href = "{{url_for('showDescription', catalog_id = catalog.id, item_id = i.id)}}"><p>{{i.name}}</p></a>
+			<a href = "{{url_for('showDescription', sport_name=currSport, item_name = i.name)}}"><p>{{i.name}}</p></a>
 	</br></br>
 	{% endfor %}
 	{% endif %}

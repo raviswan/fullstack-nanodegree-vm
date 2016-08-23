@@ -1,6 +1,6 @@
 body{font-family: 'Georgia'; background-color:rgb(255,255,255);}
 p               { color: rgb(1,1,11);}
-
+h4 {display: inline;}
 
 .titlepane{ background-color: rgb(255,255,255);
 border-color: #AAAAAA;}

@@ -14,13 +14,25 @@
 <h2>Categories</h2>
 
 
+   <div id="signInButton">
+          <span class="g-signin"
+            data-scope="openid email"
+            data-clientid="409160862920-6amc2r9efj7h130uc4brsjh41d4fdrr1.apps.googleusercontent.com"
+            data-redirecturi="postmessage"
+            data-accesstype="offline"
+            data-cookiepolicy="single_host_origin"
+            data-callback="signInCallback"
+            data-approvalprompt="force">
+          </span>
+        </div>
+
 <div class='login'>
 <a href = "{{url_for('showLogin')}}"><h2>Login</h2></a>
 </div>
 
 {% for sport in catalog %}
 
-<a href = "{{url_for('showMenu', catalog_id = sport.id)}}"> <p>{{sport.name}}</p></a>
+<a href = "{{url_for('showMenu', catalog_id = sport.id, sport_name=sport.name)}}"> <p>{{sport.name}}</p></a>
 
 
 {% endfor %}

@@ -5,8 +5,7 @@
 </head>
 	<body>
 		<p>{{item.description}}</p>
-		<a href = "{{url_for('editMenuItem', catalog_id = catalog.id, item_id = i.id)}}"><p>Edit</p></a><p>|</p>
-		<a href = "{{url_for('deleteMenuItem', catalog_id = catalog.id, item_id = i.id)}}"><p>Delete</p></a>
+		<a href = "{{url_for('editMenuItem', item_name = item.name)}}">Edit</a> <a>|</a> <a href = "{{url_for('deleteMenuItem', item_name = item.name)}}">Delete</a>
 
 	</body>
 

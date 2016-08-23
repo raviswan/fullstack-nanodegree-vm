@@ -147,7 +147,7 @@ def getUserID(email):
 
 @app.route('/gdisconnect')
 def gdisconnect():
-    access_token = login_session['access_token']
+    access_token = login_session['credentials']
     print 'In gdisconnect access token is %s', access_token
     print 'User name is: ' 
     print login_session['username']
@@ -156,7 +156,7 @@ def gdisconnect():
         response = make_response(json.dumps('Current user not connected.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session['access_token']
+    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
     print 'result is '
@@ -204,23 +204,25 @@ def showCatalog():
 
 
 # Show catalog description
-@app.route('/catalog/<int:catalog_id>/')
-@app.route('/catalog/<int:catalog_id>/menu/')
-def showMenu(catalog_id):
-    catalog = session.query(Catalog).filter_by(id=catalog_id).one()
+@app.route('/catalog/<string:sport_name>/')
+@app.route('/catalog/<string:sport_name>/items/')
+def showMenu(sport_name):
+    currSport = session.query(Catalog).filter_by(name=sport_name).one()
     fullCatalog = session.query(Catalog).all()
-    items = session.query(SportMenu).filter_by(catalog_id=catalog_id).all()
-    itemCount =  session.query(SportMenu).filter_by(catalog_id=catalog_id).count()
-    return render_template('sportMenu.html', items=items, itemCount = itemCount, catalog=catalog,
+    items = session.query(SportMenu).filter_by(catalog_id=currSport.id).all()
+    itemCount =  session.query(SportMenu).filter_by(catalog_id=currSport.id).count()
+    return render_template('sportMenu.html', items=items, itemCount = itemCount, currSport=currSport,
         fullCatalog=fullCatalog)
     # return 'This page is the menu for restaurant %s' % restaurant_id
     # 
 
 # Show catalog description
-@app.route('/catalog/<int:catalog_id>/<int:item_id>/desc/')
-def showDescription(catalog_id,item_id):
-      itemToDescribe = session.query(SportMenu).filter_by(id=item_id).one()
-      return render_template('description.html', item=itemToDescribe)
+@app.route('/catalog/<string:sport_name>/<string:item_name>/desc/')
+def showDescription(sport_name,item_name):
+    currSport = session.query(Catalog).filter_by(name=sport_name).one()
+    print "currSport=%d",currSport.name
+    itemToDescribe = session.query(SportMenu).filter_by(name=item_name, catalog_id=currSport.id).one()
+    return render_template('description.html', item=itemToDescribe,sport_name=sport_name)
 
 # Create a new catalog item
 @app.route('/catalog/new/', methods=['GET', 'POST'])
@@ -291,12 +293,13 @@ def newMenuItem(catalog_id):
         return render_template('newmenuitem.html', catalog_id=catalog_id)
 
 
-@app.route('/catalog/<int:catalog_id>/menu/<int:menu_id>/edit',
+@app.route('/catalog/<string:item_name>/edit',
            methods=['GET', 'POST'])
-def editMenuItem(catalog_id, menu_id):
+def editMenuItem(item_name):
     if 'username' not in login_session:
         return redirect('/login')
-    editedItem = session.query(SportMenu).filter_by(id=menu_id).one()
+    editedItem = session.query(SportMenu).filter_by(name=item_name).one()
+    sportForEditedItem = session.query(Catalog).filter_by(id=editedItem.catalog_id).one()
     if request.method == 'POST':
         if request.form['name']:
             editedItem.name = request.form['name']
@@ -304,27 +307,25 @@ def editMenuItem(catalog_id, menu_id):
             editedItem.description = request.form['name']
         session.add(editedItem)
         session.commit()
-        return redirect(url_for('showMenu', catalog_id=catalog_id))
+        return redirect(url_for('showMenu', sport_name=sportForEditedItem.name))
     else:
-
-        return render_template(
-            'editmenuitem.html',catalog_id=catalog_id, menu_id=menu_id, item=editedItem)
-
+        return render_template('editMenuItem.html', item=editedItem)
     # return 'This page is for editing menu item %s' % menu_id
 
 # Delete a menu item
 
 
-@app.route('/catalog/<int:catalog_id>/menu/<int:menu_id>/delete',
+@app.route('/catalog/<string:item_name>/delete',
            methods=['GET', 'POST'])
-def deleteMenuItem(catalog_id, menu_id):
+def deleteMenuItem(item_name):
     if 'username' not in login_session:
         return redirect('/login')
-    itemToDelete = session.query(SportMenu).filter_by(id=menu_id).one()
+    itemToDelete = session.query(SportMenu).filter_by(name=item_name).one()
+    sportForDeletedItem = session.query(Catalog).filter_by(id=itemToDelete.catalog_id).one()
     if request.method == 'POST':
         session.delete(itemToDelete)
         session.commit()
-        return redirect(url_for('showMenu', catalog_id=catalog_id))
+        return redirect(url_for('showMenu', sport_name=sportForDeletedItem.name))
     else:
         return render_template('deleteMenuItem.html', item=itemToDelete)
     # return "This page is for deleting menu item %s" % menu_id
