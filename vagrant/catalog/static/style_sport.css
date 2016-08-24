@@ -9,6 +9,7 @@ border-color: #AAAAAA;}
 .menupane {position:absolute; left: 40%;top: 5%; border: 2px solid;
     border-radius: 25px; padding: 20px;  }
 .login {position:absolute; left: 90%; top: 0%;}
+.latest {position:absolute; left: 50%; top: 5%;}
 .header         {left:50%; text-align: center;}
 .name {width:50%;display: inline-block; float: left;}
 .description {width:50%;display: inline-block; float: left;}

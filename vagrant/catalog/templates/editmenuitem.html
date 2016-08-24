@@ -1,21 +1,22 @@
 <html>
 
 <head>
-<link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style_sport.css') }}">
 	</head>
 
-<body><h1> Edit Menu Item </h1>
+<body><h1> Edit Item </h1>
 
-<form action="#" method = 'post'>
+<form action= "{{url_for('editMenuItem', sport_name=sport.name, item_name=item.name)}}" method = 'POST'>
+
 
 
 	<p>Name:</p>
 		<input type ='text' size='30' name='name' placeholder = '{{item.name }}'>
 	<p>Description:</p>
-		<input type ='text' size='30' name='description' placeholder = '{{item.description}}'>
+		<input type ='text' size='100' name='description' placeholder = '{{item.description}}'>
 
 
-<input type='submit' value='Edit'>
+<input type='submit' value='Update'>
 
 
 <a href = '#'> Cancel </a>

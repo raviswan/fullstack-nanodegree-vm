@@ -217,7 +217,7 @@ def showMenu(sport_name):
     # 
 
 # Show catalog description
-@app.route('/catalog/<string:sport_name>/<string:item_name>/desc/')
+@app.route('/catalog/<string:sport_name>/<string:item_name>/')
 def showDescription(sport_name,item_name):
     currSport = session.query(Catalog).filter_by(name=sport_name).one()
     print "currSport=%d",currSport.name
@@ -293,29 +293,29 @@ def newMenuItem(catalog_id):
         return render_template('newmenuitem.html', catalog_id=catalog_id)
 
 
-@app.route('/catalog/<string:item_name>/edit',
+@app.route('/catalog/<string:sport_name>/<string:item_name>/edit',
            methods=['GET', 'POST'])
-def editMenuItem(item_name):
+def editMenuItem(sport_name,item_name):
     if 'username' not in login_session:
         return redirect('/login')
-    editedItem = session.query(SportMenu).filter_by(name=item_name).one()
-    sportForEditedItem = session.query(Catalog).filter_by(id=editedItem.catalog_id).one()
+    sportForEditedItem = session.query(Catalog).filter_by(name=sport_name).one()
+    editedItem = session.query(SportMenu).filter_by(name=item_name,catalog_id=sportForEditedItem.id).one()
     if request.method == 'POST':
         if request.form['name']:
             editedItem.name = request.form['name']
         if request.form['description']:
-            editedItem.description = request.form['name']
+            editedItem.description = request.form['description']
         session.add(editedItem)
         session.commit()
-        return redirect(url_for('showMenu', sport_name=sportForEditedItem.name))
+        return redirect(url_for('showMenu', sport_name=sport_name))
     else:
-        return render_template('editMenuItem.html', item=editedItem)
+        return render_template('editmenuitem.html', sport = sportForEditedItem,item=editedItem)
     # return 'This page is for editing menu item %s' % menu_id
 
 # Delete a menu item
 
 
-@app.route('/catalog/<string:item_name>/delete',
+@app.route('/catalog/<string:sport_name>/<string:item_name>/delete',
            methods=['GET', 'POST'])
 def deleteMenuItem(item_name):
     if 'username' not in login_session:
@@ -327,7 +327,7 @@ def deleteMenuItem(item_name):
         session.commit()
         return redirect(url_for('showMenu', sport_name=sportForDeletedItem.name))
     else:
-        return render_template('deleteMenuItem.html', item=itemToDelete)
+        return render_template('deletemenuitem.html', item=itemToDelete)
     # return "This page is for deleting menu item %s" % menu_id
 
 

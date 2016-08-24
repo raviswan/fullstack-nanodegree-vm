@@ -28,7 +28,7 @@
 
     {% if items !=[] %}
     {% for i in items %}
-			<a href = "{{url_for('showDescription', sport_name=currSport, item_name = i.name)}}"><p>{{i.name}}</p></a>
+			<a href = "{{url_for('showDescription', sport_name=currSport.name, item_name = i.name)}}"><p>{{i.name}}</p></a>
 	</br></br>
 	{% endfor %}
 	{% endif %}
