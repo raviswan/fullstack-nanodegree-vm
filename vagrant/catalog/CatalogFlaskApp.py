@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, flash
 from flask import session as login_session
 import random,string
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine,desc
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Catalog, SportMenu, User
 
@@ -199,9 +199,13 @@ def catalogJSON():
 @app.route('/catalog/')
 def showCatalog():
     catalog = session.query(Catalog).all()
-    return render_template('catalog.html', catalog=catalog)
-
-
+    latest = (session.query(SportMenu).order_by(desc(SportMenu.time_stamp)).\
+                join(Catalog.sport_menu).limit(10).values(SportMenu.name,\
+                    Catalog.name))
+    latest_items = []
+    for i,s in latest:
+        latest_items.append({i,s})
+    return render_template('catalog.html', catalog=catalog,latest_items=latest_items)
 
 # Show catalog description
 @app.route('/catalog/<string:sport_name>/')
@@ -220,7 +224,6 @@ def showMenu(sport_name):
 @app.route('/catalog/<string:sport_name>/<string:item_name>/')
 def showDescription(sport_name,item_name):
     currSport = session.query(Catalog).filter_by(name=sport_name).one()
-    print "currSport=%d",currSport.name
     itemToDescribe = session.query(SportMenu).filter_by(name=item_name, catalog_id=currSport.id).one()
     return render_template('description.html', item=itemToDescribe,sport_name=sport_name)
 

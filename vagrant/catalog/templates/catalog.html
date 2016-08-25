@@ -9,12 +9,20 @@
 <h1>Catalog App</h1>
 </div>
 
+<div class='latest'>
+  <h2>Latest Items</h2>
+  {% if latest_items !=[] %}
+  {% for k,v in latest_items  %}   
+  <p>{{k}}({{v}})</p>
+  {% endfor %}
+  {% endif %}
+</div>
 
 <div class = 'pane2'>
 <h2>Categories</h2>
 
 
-   <div id="signInButton">
+  <div id="signInButton">
           <span class="g-signin"
             data-scope="openid email"
             data-clientid="409160862920-6amc2r9efj7h130uc4brsjh41d4fdrr1.apps.googleusercontent.com"
@@ -24,11 +32,12 @@
             data-callback="signInCallback"
             data-approvalprompt="force">
           </span>
-        </div>
+  </div>
 
-<div class='login'>
-<a href = "{{url_for('showLogin')}}"><h2>Login</h2></a>
-</div>
+  <div class='login'>
+    <a href = "{{url_for('showLogin')}}"><h2>Login</h2></a>
+  </div>
+
 
 {% for sport in catalog %}
 

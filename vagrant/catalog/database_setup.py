@@ -38,14 +38,14 @@ class Catalog(Base):
 
 
 class SportMenu(Base):
-    __tablename__ = 'catalog_items'
+    __tablename__ = 'sport_menu'
 
     name = Column(String(80), nullable=False)
     id = Column(Integer, primary_key=True)
     description = Column(String(250))
-    time_stamp = Column(DateTime(timezone=True), default=func.now())
+    time_stamp = Column(DateTime(timezone=True), server_default=func.now())
     catalog_id = Column(Integer, ForeignKey('catalog.id'))
-    catalog = relationship("Catalog")
+    catalog = relationship("Catalog",backref="sport_menu")
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
 
