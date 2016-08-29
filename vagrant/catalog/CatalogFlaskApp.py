@@ -205,7 +205,10 @@ def showCatalog():
     latest_items = []
     for i,s in latest:
         latest_items.append({i,s})
-    return render_template('catalog.html', catalog=catalog,latest_items=latest_items)
+    if 'username' not in login_session:
+        return render_template('catalog_public.html', catalog=catalog,latest_items=latest_items)
+    else:
+        return render_template('catalog.html', catalog=catalog,latest_items=latest_items)
 
 # Show catalog description
 @app.route('/catalog/<string:sport_name>/')
@@ -262,8 +265,8 @@ def editSport(sport_id):
 # Delete a restaurant
 
 
-@app.route('/catalog/<int:catalog_id>/delete/', methods=['GET', 'POST'])
-def deleteSport(catalog_id):
+@app.route('/catalog/<int:sport_id>/delete/', methods=['GET', 'POST'])
+def deleteSport(sport_id):
     if 'username' not in login_session:
         return redirect('/login')
     itemToDelete = session.query(
@@ -280,20 +283,22 @@ def deleteSport(catalog_id):
 
 
 
-@app.route(
-    '/catalog/<int:catalog_id>/menu/new/', methods=['GET', 'POST'])
-def newMenuItem(catalog_id):
+@app.route('/catalog/<string:sport_name>/add', methods=['GET', 'POST'])
+def addItem():
+    sportForItem = session.query(Catalog).filter_by(name=sport_name).one()
     if 'username' not in login_session:
         return redirect('/login')
     if request.method == 'POST':
-        newItem = SportMenu(name=request.form['name'], description=request.form[
-                           'description'], catalog_id=catalog_id,user_id = login_session['user_id'] )
-        session.add(newItem)
+        if request.form['name']:
+            newItemName = request.form['name']
+        if request.form['description']:
+            newItemDescription = request.form['description']
+        itemToAdd = SportMenu(name=newItemName, description=newItemDescription,catalog=sportForItem)
+        session.add(itemToAdd)
         session.commit()
-
-        return redirect(url_for('showMenu', catalog_id=catalog_id))
+        return redirect(url_for('showCatalog', sport_name=sport_name))
     else:
-        return render_template('newmenuitem.html', catalog_id=catalog_id)
+        return redirect(url_for('showCatalog', sport_name=sport_name))
 
 
 @app.route('/catalog/<string:sport_name>/<string:item_name>/edit',
@@ -320,17 +325,17 @@ def editMenuItem(sport_name,item_name):
 
 @app.route('/catalog/<string:sport_name>/<string:item_name>/delete',
            methods=['GET', 'POST'])
-def deleteMenuItem(item_name):
+def deleteMenuItem(sport_name,item_name):
     if 'username' not in login_session:
         return redirect('/login')
-    itemToDelete = session.query(SportMenu).filter_by(name=item_name).one()
-    sportForDeletedItem = session.query(Catalog).filter_by(id=itemToDelete.catalog_id).one()
+    sportForDeleteItem = session.query(Catalog).filter_by(name=sport_name).one()
+    itemToDelete = session.query(SportMenu).filter_by(name=item_name,catalog_id=sportForDeleteItem.id).one()
     if request.method == 'POST':
         session.delete(itemToDelete)
         session.commit()
-        return redirect(url_for('showMenu', sport_name=sportForDeletedItem.name))
+        return redirect(url_for('showMenu', sport_name=sport_name))
     else:
-        return render_template('deletemenuitem.html', item=itemToDelete)
+        return render_template('deletemenuitem.html', sport = sportForDeleteItem, item=itemToDelete)
     # return "This page is for deleting menu item %s" % menu_id
 
 

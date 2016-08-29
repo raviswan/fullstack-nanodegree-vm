@@ -10,7 +10,6 @@
 </div>
 
 <div class='latest'>
-
   <h2>Latest Items</h2>
   {% if latest_items !=[] %}
   {% for k,v in latest_items  %}   
@@ -22,7 +21,7 @@
 <div class = 'pane2'>
 <h2>Categories</h2>
 
-  <a href = "{{url_for('addItem')}}"> <h3>Add Item</h3></a>
+
   <div id="signInButton">
           <span class="g-signin"
             data-scope="openid email"
